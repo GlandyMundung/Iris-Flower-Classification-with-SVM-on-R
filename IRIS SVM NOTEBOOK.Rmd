@@ -1,0 +1,109 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+
+library(e1071)
+library(caret)
+library(devtools)
+
+```
+
+```{r}
+
+iris=datasets::iris
+View(iris)
+
+```
+
+```{r}
+
+#Melihat tipe data
+class(iris)
+c(class(iris$Sepal.Length), class(iris$Sepal.Width),  class(iris$Petal.Length),class(iris$Petal.Width),
+class(iris$Species))
+
+```
+
+```{r}
+
+#Melihat ringkasan data
+summary(iris)
+
+```
+
+```{r}
+
+#80% data sebagai data training
+n = round(nrow(iris)*0.8)
+n
+
+```
+
+```{r}
+
+set.seed(12345)
+sample_iris = sample(seq_len(nrow(iris)), size = n)
+data.train = iris[sample_iris,]
+data.test = iris[-sample_iris,]
+sample_iris
+
+```
+
+```{r}
+
+head(data.train,5); head(data.test,5)
+
+```
+
+```{r}
+
+#Model support vector machine & training prediction
+svm.iris <- svm(factor(Species) ~., data = data.train)
+svm.iris
+
+```
+
+```{r}
+
+#Pengujian Model SVM Data Training
+prediksi1 <- predict(svm.iris, data.train)
+prediksi1
+
+```
+
+```{r}
+
+head(prediksi1,10); tail(prediksi1,10)
+
+```
+
+```{r}
+#Training Accuracy
+confusionMatrix(prediksi1, factor(data.train$Species))
+
+```
+
+```{r}
+
+#Pengujian Model SVM Data Testing
+prediksi2 <- predict(svm.iris, data.test)
+prediksi2
+
+```
+
+```{r}
+
+head(prediksi2,10); tail(prediksi2,10)
+
+```
+
+```{r}
+
+#Testing Accuracy
+confusionMatrix(prediksi2, factor(data.test$Species))
+
+```
+
